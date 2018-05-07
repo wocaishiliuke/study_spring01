@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+<!-- IOC原理+DI -->
+	<!-- bean: spring工厂创建的一个对象(反射机制)
+		id/name:对象的名字,可以用来引用或者获取对象, 一般为类名或接口名称的首字母小写
+		class:要创建的对象类型的类字符串,类名全路径 -->
+	<bean id="userDao" class="com.test.ioc.principle.UserDaoImpl"/>
+	<!-- <bean id="userDao2" class="com.test.ioc.principle.UserDaoImpl"/> -->
+	
+	<bean id="userService" class="com.test.ioc.principle.UserServiceImpl">
+		<!-- property 根据类中的setter方法进行属性注入 -->
+		<!-- name：setter方法的后缀小写,比如setXxx 对应的name为xxx(写好setter()后，可自动补全) -->
+		<!-- ref：要引入bean的id/name -->
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
+<!-- 配置bean的四种方式 -->
+	<!-- 方式1：默认空参构造生产实例 -->
+	<bean id="bean1" class="com.test.ioc.bean.xml.Bean1"/>
+	
+	<!-- 方式2：静态工厂方式 -->
+	<!-- class:直接指定到静态工厂类, factory-method: 指定到生产实例的方法, spring容器在实例化工厂类的时候会自动调用该方法并返回实例对象 -->
+	<bean id="bean2" class="com.test.ioc.bean.xml.Bean2Factory" factory-method="getBean2"/>
+	
+	<!-- 方式3：实例工厂方式 -->
+	<bean id="bean3Factory" class="com.test.ioc.bean.xml.Bean3Factory"/>
+	<bean id="bean3" class="com.test.ioc.bean.xml.Bean3" factory-bean="bean3Factory" factory-method="getBean3"/>
+	
+	<!-- 方式4：FactoryBean接口方式 -->
+	<!-- class属性指向FactoryBean接口的实现类 -->
+	<bean id="bean4" class="com.test.ioc.bean.xml.Bean4FactoryBean"/>
+	
+<!-- 作用域 -->
+	<bean id="singletonBean" class="com.test.ioc.bean.lifescope.SingletonBean"/>
+	<bean id="prototypeBean" class="com.test.ioc.bean.lifescope.PrototypeBean" scope="prototype"/>
+	
+<!-- 生命周期 -->
+	<bean id="lifeCycleBean" class="com.test.ioc.bean.lifecycle.LifeCycleBean" init-method="init" destroy-method="destroy"/>
+	
+<!-- bean后处理器 -->
+	<!-- 后处理bean：spring在初始化MyBeanPostProcessor类时，判断该类是否实现了BeanPostProcessor。如果实现了，就采用动态代理的方式，对所有的bean对象增强 -->
+	<bean id="myBeanPostProcessor" class="com.test.ioc.bean.lifecycle.MyBeanPostProcessor"/>
+	
+<!-- DI注入2种方式 -->
+	<!-- 第1种：构造器注入属性的值 -->
+	<bean id="car" class="com.test.ioc.bean.xml.di.Car">
+		<!--constructor-arg：告诉spring容器，要调用有参构造，不再调用默认的空参构造
+		new Car(1,"宝马",99999d)
+		参数第一组：用于定位属性
+		    * index：根据索引定位属性，以0开始
+			* name：根据属性参数名称定位属性
+			* type：根据属性数据类型定位属性
+		参数第二组：用于赋值
+			* value:简单的值，字符串
+			* ref:复杂的（由spring容器创建的bean对象）
+		-->
+		<!-- <constructor-arg index="0" value="1"/> -->
+		<constructor-arg index="0" name="id" value="1"/>
+		<!-- <constructor-arg name="name" value="宝马1代"/> -->
+		<constructor-arg name="name" >
+			<value>宝马2代</value>
+		</constructor-arg>
+		<constructor-arg type="java.lang.Double" value="99999d"/>
+	</bean>
+</beans>
