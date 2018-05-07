@@ -46,7 +46,7 @@
 	<bean id="myBeanPostProcessor" class="com.test.ioc.bean.lifecycle.MyBeanPostProcessor"/>
 	
 <!-- DI注入2种方式 -->
-	<!-- 第1种：构造器注入属性的值 -->
+	<!-- 第1种：有参构造注入属性的值 -->
 	<bean id="car" class="com.test.ioc.bean.xml.di.Car">
 		<!--constructor-arg：告诉spring容器，要调用有参构造，不再调用默认的空参构造
 		new Car(1,"宝马",99999d)
