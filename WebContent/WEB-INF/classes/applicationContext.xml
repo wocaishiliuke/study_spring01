@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:p="http://www.springframework.org/schema/p"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans.xsd">
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<!-- 开启spring的注解功能,有component-scan时可省略 -->
+	<context:annotation-config/>
+	
+	<!-- 配置注解扫描 
+			context:component-scan:专门扫描含有@Component注解的类，自动将其作为bean
+			base-package：要扫描包的路径,包含子包下的所有类
+			注解扫描配置的时候，会自动开启注解功能
+	-->
+	<context:component-scan base-package="com.test.ioc.bean.anno"/>
+	
+	
 	
 <!-- IOC原理+DI -->
 	<!-- bean: spring工厂创建的一个对象(反射机制)
@@ -66,4 +82,39 @@
 		</constructor-arg>
 		<constructor-arg type="java.lang.Double" value="99999d"/>
 	</bean>
+	<!-- 第2种：无参构造+setter方法注入属性值 -->
+	<bean id="person" class="com.test.ioc.bean.xml.di.Person">
+		<!-- 
+			property：专门进行setter属性注入用的标签
+			* name：setter方法的属性名,例如setXxx-那么name的属性值为xxx。不是成员变量名（跟setter方法走）
+			* value：简单的值
+			* ref：bean的名字，对象的引用
+		-->
+		<property name="id" value="1"/>
+		<property name="name" value="Tony"/>
+		<property name="car" ref="car"/>
+		<!-- <property name="name">
+			<value>Tony</value>
+		</property> -->
+		<!-- <property name="car">
+			<ref bean="car"/>
+		</property> -->
+	</bean>
+	
+<!-- p名称空间 -->
+	<!-- 使用p名称空间简化setter方法属性注入 -->
+	<!--
+		p:name：简单数据类型的属性注入
+		P:car-ref：复杂数据类型（bean）的属性注入
+	-->
+	<bean id="person1" class="com.test.ioc.bean.xml.di.Person" p:id="2" p:name="Lucy" p:car-ref="car"/>
+	
+<!-- spEL表达式 -->
+	<bean id="person2" class="com.test.ioc.bean.xml.di.Person">
+		<property name="id" value="#{person1.id}"/>
+		<property name="name" value="#{car.name}"/>
+		<property name="car" ref="car"/>
+	</bean>
+	<bean id="person3" class="com.test.ioc.bean.xml.di.Person" p:id="#{person1.id + 10}" p:name="car.name" p:car-ref="car"/>
+	<bean id="person4" class="com.test.ioc.bean.xml.di.Person" p:id="#{1 + 100}" p:name="#{'alivn'.toUpperCase()}" p:car-ref="car"/>
 </beans>

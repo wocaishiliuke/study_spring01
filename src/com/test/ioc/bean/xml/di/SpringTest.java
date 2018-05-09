@@ -6,9 +6,15 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringTest {
 	@Test
-	public void testLogin() {
+	public void testDi() {
 		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-		Car car = (Car) ac.getBean("car");
-		System.out.println(car);
+		Person person1 = (Person) ac.getBean("person1");
+		System.out.println(person1);
+		Person person2 = (Person) ac.getBean("person2");
+		System.out.println(person2);
+		Person person3 = (Person) ac.getBean("person3");
+		System.out.println(person3);
+		Person person4 = (Person) ac.getBean("person4");
+		System.out.println(person4);
 	}
 }

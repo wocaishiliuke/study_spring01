@@ -6,7 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class SpringTest {
 	@Test
-	public void testScope() {
+	public void testLifeCycle() {
 		//对于单例此时也会创建和初始化
 		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
 		

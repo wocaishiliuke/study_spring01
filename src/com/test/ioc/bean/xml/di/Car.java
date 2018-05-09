@@ -12,6 +12,11 @@ public class Car {
 		this.price = price;
 	}
 	
+	//配合spEL表达式
+	public String getName() {
+		return name;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", name=" + name + ", price=" + price + "]";
